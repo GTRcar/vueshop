@@ -5,17 +5,21 @@
       <div id="logo-box">
         <img src="../assets/img/logo.png" alt>
       </div>
-      <el-form ref="loginFormRef" :model="loginForm">
-        <el-form-item>
-          <el-input v-model="loginForm.username" placeholder="请输入内容"></el-input>
+      <el-form ref="loginFormRef" :model="loginForm" :rules="loginFromRules">
+        <el-form-item prop="username">
+          <el-input v-model="loginForm.username" placeholder="请输入用户名">
+            <i slot="prefix" class="iconfont icon-1USER"></i>
+          </el-input>
         </el-form-item>
-        <el-form-item>
-          <el-input placeholder="请输入密码" v-model="loginForm.password" show-password></el-input>
+        <el-form-item prop="password">
+          <el-input v-model="loginForm.password" show-password placeholder="请输入用户密码">
+            <i slot="prefix" class="iconfont icon-password"></i>
+          </el-input>
         </el-form-item>
         <el-row>
           <el-col :offset="15">
-            <el-button type="primary">登录</el-button>
-            <el-button type="info">重置</el-button>
+            <el-button type="primary" @click="login()">登陆</el-button>
+            <el-button type="info" @click="resetForm()">重置</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -25,11 +29,43 @@
 
 <script>
 export default {
+  methods: {
+    login() {
+      // 对form表单进行整体的验证
+      this.$refs.loginFormRef.validate(async valid => {
+        if (valid === true) {
+          const { data: dt } = await this.$http.post('login', this.loginForm)
+          // const data = await this.$router.push('/login')
+          console.log(dt)
+          if (dt.meta.status !== 200) {
+            return this.$message.error(dt.meta.msg)
+          }
+          window.sessionStorage.setItem('token', dt.data.token)
+          this.$router.push('/home')
+        }
+
+        // console.log(valid)
+      })
+
+      // console.log(this)
+    },
+    resetForm() {
+      this.$refs.loginFormRef.resetFields()
+    }
+  },
   data() {
     return {
+      loginFromRules: {
+        username: { required: true, message: '请输入用户名', trigger: 'blur' },
+        password: {
+          required: true,
+          message: '请输入用户密码',
+          trigger: 'blur'
+        }
+      },
       loginForm: {
-        username: 'admin',
-        password: '123456'
+        username: '',
+        password: ''
       }
     }
   }
