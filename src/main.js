@@ -10,7 +10,7 @@ import './assets/css/global.css'
 import ElementUI from 'element-ui'
 
 // 引入font字体图标
-import './assets/font/iconfont.css'
+import '../src/assets/fonts/iconfont.css'
 
 // 引入axios模块
 import axios from 'axios'
@@ -21,6 +21,21 @@ Vue.config.productionTip = false
 // axios做配置
 // 给axios配置公共根地址
 axios.defaults.baseURL = 'http://127.0.0.1:11333/api/private/v1/'
+
+// 给axios设置请求拦截器。
+// config:axios的配置對象，具体是axios内部的子级成员
+axios.interceptors.request.use(
+  function(config) {
+    var token = window.sessionStorage.getItem('token')
+    config.headers.Authorization = token
+    // console.log(config)
+    return config
+  },
+  function(error) {
+    return Promise.reject(error)
+  }
+)
+
 Vue.prototype.$http = axios
 
 /* eslint-disable no-new */
