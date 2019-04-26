@@ -276,6 +276,7 @@ export default {
           { validator: checkMobile, trigger: 'blur' }
         ]
       },
+
       addUserDialog: false,
       addruleForm: {
         username: '',

@@ -32,7 +32,7 @@ export default {
   methods: {
     login() {
       // 对form表单进行整体的验证
-      this.$refs.loginFormRef.validate(async valid => {
+      this.$refs.loginFormRef.validate(async valid=> {
         if (valid === true) {
           const { data: dt } = await this.$http.post('login', this.loginForm)
           // const data = await this.$router.push('/login')
