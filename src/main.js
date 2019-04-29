@@ -9,6 +9,10 @@ import './assets/css/global.css'
 // 引入element-ui
 import ElementUI from 'element-ui'
 
+// 引用面包屑组件
+import ComCrumb from './components/Share/Crumb.vue'
+// 应用饿了吗组件的css样式
+import 'element-ui/lib/theme-chalk/index.css';
 // 引入font字体图标
 import '../src/assets/fonts/iconfont.css'
 
@@ -16,6 +20,9 @@ import '../src/assets/fonts/iconfont.css'
 import axios from 'axios'
 // 注册组件给vue
 Vue.use(ElementUI)
+
+// 注册为共有组件
+Vue.component('com-crumb', ComCrumb)
 
 Vue.config.productionTip = false
 // axios做配置
@@ -25,13 +32,13 @@ axios.defaults.baseURL = 'http://127.0.0.1:11333/api/private/v1/'
 // 给axios设置请求拦截器。
 // config:axios的配置對象，具体是axios内部的子级成员
 axios.interceptors.request.use(
-  function(config) {
+  function (config) {
     var token = window.sessionStorage.getItem('token')
     config.headers.Authorization = token
     // console.log(config)
     return config
   },
-  function(error) {
+  function (error) {
     return Promise.reject(error)
   }
 )

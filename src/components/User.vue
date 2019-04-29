@@ -1,13 +1,35 @@
 <template>
   <div>
     <!-- 面包屑 -->
-    <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-      <el-breadcrumb-item>用户列表</el-breadcrumb-item>
-    </el-breadcrumb>
+    <com-crumb nm="用户"></com-crumb>
     <!-- 卡片区 -->
     <el-card class="box-card">
+      <!-- 用户分配角色的对话框 -->
+    <el-dialog
+      title="分配角色"
+      :visible.sync="setRoleDialog"
+      width="50%"
+      @close="$refs.setRoleRef.resetFields()"
+    >
+      <el-form :rules="setRoleRules" ref="setRoleRef" :model="setRole" label-width="120px">
+        <el-form-item label="当前用户：" prop="username">{{setRole.username}}</el-form-item>
+        <el-form-item label="目前角色：" prop="role_name">{{setRole.role_name}}</el-form-item>
+        <el-form-item label="分配新角色：" prop="rid">
+          <el-select v-model="setRole.rid" placeholder="请选择">
+            <el-option
+              v-for="item in roleList"
+              :key="item.id"
+              :label="item.roleName"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="setRoleDialog = false">取 消</el-button>
+        <el-button type="primary" @click="fenrole()">确 定</el-button>
+      </span>
+    </el-dialog>
       <!-- 编辑用户 -->
       <el-dialog title="修改用户" :visible.sync="editUserDialog" width="40%">
         <el-form :model="editruleForm" :rules="editUserules" ref="editForm" label-width="100px">
@@ -87,6 +109,7 @@
             slot-scope="info"
             active-color="#13ce66"
             inactive-color="#ff4949"
+            @change="stateChange(info.row, info.row.mg_state)"
           ></el-switch>
         </el-table-column>
         <el-table-column label="操作">
@@ -115,7 +138,7 @@
                   size="mini"
                   type="warning"
                   icon="el-icon-setting"
-                  @click="addUserdialog = true"
+                   @click="showSetRoleDialog(info.row)"
                 ></el-button>
               </el-tooltip>
             </el-row>
@@ -141,8 +164,71 @@ export default {
     this.getUserList()
   },
   methods: {
-    // 添加用户
+    // 修改用户的状态
+    // user: 当前用户对象数据
+    // state: 变化后的状态值
+    async stateChange(user, state) {
+      const { data: dt } = await this.$http.put(
+        `users/${user.id}/state/${state}`
+      )
+      if (dt.meta.status !== 200) {
+        return this.$message.error(dt.meta.msg)
+      }
+      // 修改状态成功：提示
+      this.$message.success(dt.meta.msg)
+    },
+    // 修改用户的状态
+    // user: 当前用户对象数据
+    // state: 变化后的状态值
+    async stateChange(user, state) {
+      const { data: dt } = await this.$http.put(
+        `users/${user.id}/state/${state}`
+      )
+      if (dt.meta.status !== 200) {
+        return this.$message.error(dt.meta.msg)
+      }
+      // 修改状态成功：提示
+      this.$message.success(dt.meta.msg)
+    },
+    /** 用户分配角色相关1 */
+    // 收集角色存储入库
+    fenrole() {
+      // 校验表单项目
+      this.$refs.setRoleRef.validate(async valid => {
+        if (valid === true) {
+          const { data: dt } = await this.$http.put(
+            `users/${this.setRole.id}/role`,
+            {
+              rid: this.setRole.rid
+            }
+          )
+          if (dt.meta.status !== 200) {
+            return this.$message.error(dt.meta.msg)
+          }
+          // 分配角色成功：提示、关闭对话框、更新数据
+          this.$message.success(dt.meta.msg)
+          this.setRoleDialog = false
+          this.getUserList()
+        }
+      })
+    },
+     // 展开分配角色对话框
+    // user: 当前正在分配角色的用户对象信息(id/username/role_name/mobile/email等等)
+    async showSetRoleDialog(user) {
+      // 把用于选取的角色数据获得到
+      const { data: dt } = await this.$http.get('roles')
+      if (dt.meta.status !== 200) {
+        return this.$message.error(dt.meta.msg)
+      }
+      // 把获得到的角色数据传递给组件成员roleList
+      this.roleList = dt.data
 
+      // 把user赋予给表单对象setRole
+      this.setRole = user
+      // 展开对话框
+      this.setRoleDialog = true
+    },
+    // 添加用户
     // 分页相关，每页条数变化的处理
     // 把变化后的条数赋予给querycdt.pagesize
     handleSizeChange(val) {
@@ -255,6 +341,24 @@ export default {
     }
 
     return {
+       /** 分配角色相关1 */
+      // 表单校验
+      setRoleRules: {
+        rid: [
+          { required: true, message: '必须选取一个角色', trigger: 'change' }
+        ]
+      },
+      // 用于分配的角色数据
+      roleList: [],
+      // 对话框显示开关
+      setRoleDialog: false,
+      // 表单对象
+      setRole: {
+        username: '',
+        role_name: '',
+        // 选中角色用此成员接收
+        rid: 0
+      },
       addUserules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' }
