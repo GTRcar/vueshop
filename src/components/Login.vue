@@ -3,17 +3,17 @@
     <!-- <p>管理员登录系统</p> -->
     <div id="login-box">
       <div id="logo-box">
-        <img src="../assets/img/logo.png" alt>
+        <img src="../assets/img/dongman.png" alt>
       </div>
       <el-form ref="loginFormRef" :model="loginForm" :rules="loginFromRules">
         <el-form-item prop="username">
           <el-input v-model="loginForm.username" placeholder="请输入用户名">
-            <i slot="prefix" class="iconfont icon-1USER"></i>
+            <i slot="prefix" class="iconfont icon-user"></i>
           </el-input>
         </el-form-item>
         <el-form-item prop="password">
           <el-input v-model="loginForm.password" show-password placeholder="请输入用户密码">
-            <i slot="prefix" class="iconfont icon-password"></i>
+            <i slot="prefix" class="iconfont icon-lock_fill"></i>
           </el-input>
         </el-form-item>
         <el-row>
@@ -74,8 +74,8 @@ export default {
 
 <style lang="less" scoped>
 #login-container {
-  background-color: #2b4b6b;
-  height: 100%;
+  background-image: url('../assets/img/beijing.jpg');
+  height: 100%; 
   overflow: hidden;
   #login-box {
     width: 450px;

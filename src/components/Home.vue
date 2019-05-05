@@ -5,7 +5,7 @@
         <img src="../assets/img/heima.png" alt>
         <span>电商后台管理系统</span>
       </div>
-      <el-button type="info" @click="logout()">退出</el-button>
+      <el-button  type="info" @click="logout()">退出</el-button>
     </el-header>
     <el-container>
       <el-aside :width="isshow?'65px':'200px'">
@@ -95,12 +95,12 @@ export default {
 .el-container {
   height: 100%;
   .el-header {
-    background-color: #373d41;
+      background-color: #373d41;
     display: flex;
-    align-items: center; //纵轴对齐
+    align-items: center;
     justify-content: space-between;
-    padding: 0px;
-    padding-right: 20px;
+    padding: 0;
+    padding-right: 80px;
     .logo_box {
       display: flex;
       color: #fff;

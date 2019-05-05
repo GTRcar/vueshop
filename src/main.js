@@ -2,6 +2,8 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
+// 声明使用过滤器--
+import moment from 'moment' 
 
 import router from './router/index.js'
 // 引入全局的css样式文件
@@ -37,11 +39,16 @@ axios.interceptors.request.use(
     config.headers.Authorization = token
     // console.log(config)
     return config
+
   },
   function (error) {
     return Promise.reject(error)
   }
 )
+
+Vue.filter('dateFormat',(v) => {
+  return moment(v).format('YYYY-MM-DD')
+})
 
 Vue.prototype.$http = axios
 
