@@ -1,21 +1,24 @@
 import Vue from 'vue'
-import Router from 'vue-router'
+import VueRouter from 'vue-router'
 // import HelloWorld from '@/components/HelloWorld'
-import Login from '@/components/Login'
+// 路由懒加载目的是: 拆解成每个组件自己的小js
+// const Foo = () => import('./Foo.vue')
 
-import Home from '@/components/Home'
-import Welcome from '@/components/Welcome'
-import User from '@/components/User'
-import Rights from '@/components/Rights'
-import Role from '@/components/Role'
-import Cat from '@/components/Cat'
-import Param from '@/components/Param'
-import Goods from '@/components/Goods'
-import GoodsAdd from '@/components/GoodsAdd'
-import Order from '@/components/Order'
-Vue.use(Router)
+const Login = () => import('@/components/Login') 
+const Home = () => import('@/components/Home') 
+const Welcome = () => import('@/components/Welcome') 
+const User = () => import('@/components/User') 
+const Rights = () => import('@/components/Rights') 
+const Role = () => import( '@/components/Role')
+const Cat = () => import('@/components/Cat') 
+const Param = () => import('@/components/Param') 
+const Goods = () => import('@/components/Goods') 
+const GoodsAdd = () => import('@/components/GoodsAdd') 
+const Order = () => import('@/components/Order') 
+const Reports = () => import('@/components/Reports') 
+Vue.use(VueRouter)
 
-const router = new Router({
+const router = new VueRouter({
   routes: [
     //  {path: '/', name: 'HelloWorld', component: HelloWorld}
     {
@@ -69,6 +72,10 @@ const router = new Router({
         {
           path: '/orders',
           component: Order
+        },
+        {
+          path: '/reports',
+          component: Reports
         }
       ]
     }

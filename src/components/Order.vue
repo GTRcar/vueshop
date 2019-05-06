@@ -61,8 +61,13 @@
 
       <!--物流弹层区域-->
       <el-dialog title="物流信息" :visible.sync="wuliuDialogVisible" width="50%">
-        <el-steps  direction="vertical" :active="1">
-          <el-step v-for="(item,i) in wuliuList" :key="i" :title="item.ftime" :description="item.context"></el-step>
+        <el-steps direction="vertical" :active="1">
+          <el-step
+            v-for="(item,i) in wuliuList"
+            :key="i"
+            :title="item.ftime"
+            :description="item.context"
+          ></el-step>
         </el-steps>
       </el-dialog>
     </el-card>
