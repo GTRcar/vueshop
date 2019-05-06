@@ -2,19 +2,24 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
+
 // 声明使用过滤器--
 import moment from 'moment' 
 
 import router from './router/index.js'
+
 // 引入全局的css样式文件
 import './assets/css/global.css'
+
 // 引入element-ui
 import ElementUI from 'element-ui'
 
 // 引用面包屑组件
 import ComCrumb from './components/Share/Crumb.vue'
+
 // 应用饿了吗组件的css样式
 import 'element-ui/lib/theme-chalk/index.css';
+
 // 引入font字体图标
 import '../src/assets/fonts/iconfont.css'
 
@@ -45,7 +50,7 @@ axios.interceptors.request.use(
     return Promise.reject(error)
   }
 )
-
+// 过滤器
 Vue.filter('dateFormat',(v) => {
   return moment(v).format('YYYY-MM-DD')
 })
